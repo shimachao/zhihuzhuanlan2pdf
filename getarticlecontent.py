@@ -5,6 +5,7 @@
 
 import requests
 import json
+import re
 # import jinja2
 
 
@@ -17,6 +18,7 @@ class ZhuanlanSession:
                                               '(KHTML, like Gecko)Chrome/35.0.1916.153 Safari/537.36 SE 2.X MetaSr 1.0',
                                 'Encoding': 'UTF-8'}
         self.img_path = './img'  # 图片的保存路径
+        self.pattern = r'https://.{8,256}?\.(jpg|png)'
 
     def get_one_article(self, slug):
         """ 获取 slug 指定的一篇知乎专栏文章
@@ -68,6 +70,11 @@ class ZhuanlanSession:
         article['author_avatar_url'] = self.img_download(url=article['author_avatar_url'])
 
         # 处理文章正文中的图片链接
+        def replace(match):
+            return self.img_download(match.group(0))
+
+        article['content'] = re.sub(pattern=self.pattern, repl=replace, string=article['content'])
+        # TODO:将正则表达式的模式编译成正则表达式对象，可以提高效率
 
     # @staticmethod
     # def render_article_to_html(article):
