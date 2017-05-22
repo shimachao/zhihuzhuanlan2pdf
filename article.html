@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>{{ article['title'] }}</title>
+    <title>${ article['title'] | n}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <link rel="stylesheet" href="./article.css">
 </head>
@@ -17,22 +17,22 @@
                 <!-- react-empty: 19 -->
                 <div class="Layout-main av-paddingBottom av-bodyFont Layout-titleImage--normal" data-za-module="PostItem">
                     <div class="PostIndex-header av-paddingTop av-card">
-                        <div class="TitleImage"><img alt="{{ article['title'] }}" src="{{ article['title_image_url'] }}" class="TitleImage-imagePure TitleImage-imagePure--fixed" height="364px" />
+                        <div class="TitleImage"><img alt="${ article['title'] | n}" src="${ article['title_image_url'] | n}" class="TitleImage-imagePure TitleImage-imagePure--fixed" height="364px" />
                         </div>
-                        <h1 class="PostIndex-title av-paddingSide av-titleFont">{{ article['title'] }}</h1>
+                        <h1 class="PostIndex-title av-paddingSide av-titleFont">${ article['title'] | n}</h1>
                         <div class="PostIndex-author">
                             <a href="" target="_blank">
-                                <img class="Avatar PostIndex-authorAvatar Avatar--xs" alt="{{ article['author_name'] }}" src="https://pic3.zhimg.com/v2-b4f40e7204d7f7eb52d5589931f3c4aa_xs.jpg"/>
+                                <img class="Avatar PostIndex-authorAvatar Avatar--xs" alt="${ article['author_name'] | n}" src="${article['author_avatar_url'] | n}"/>
                             </a>
                             <a href=""
-                                target="_blank" class="PostIndex-authorName">{{ article['author_name'] }}
+                                target="_blank" class="PostIndex-authorName">${ article['author_name'] | n}
                             </a>
                             <!-- react-empty: 30 --><span class="Bull"></span>
-                            <div class="HoverTitle" data-hover-title="{{ article['publishedTime'] }}"><time datetime="{{ article['publishedTime'] }}">{{ article['publishedTime'] }}</time></div>
+                            <div class="HoverTitle" data-hover-title="${ article['publishedTime'] | n}"><time datetime="${ article['publishedTime'] | n}">${ article['publishedTime'] | n}</time></div>
                         </div>
                     </div>
                     <div class="RichText PostIndex-content av-paddingSide av-card">
-                        {{ article['content']|safe }}
+                        ${ article['content']| n }
                     </div>
                 </div>
             </div>

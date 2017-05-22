@@ -6,7 +6,7 @@
 import requests
 import json
 import re
-# import jinja2
+from mako.template import Template
 
 
 class ZhuanlanSession:
@@ -19,6 +19,8 @@ class ZhuanlanSession:
                                 'Encoding': 'UTF-8'}
         self.img_path = './img'  # 图片的保存路径
         self.pattern = r'https://.{8,256}?\.(jpg|png)'
+
+        self.article_template = Template(filename='./article.html')
 
     def get_one_article(self, slug):
         """ 获取 slug 指定的一篇知乎专栏文章
@@ -76,15 +78,12 @@ class ZhuanlanSession:
         article['content'] = re.sub(pattern=self.pattern, repl=replace, string=article['content'])
         # TODO:将正则表达式的模式编译成正则表达式对象，可以提高效率
 
-    # @staticmethod
-    # def render_article_to_html(article):
-    #     """ 将字典对象表示的 article 用模板引擎渲染成一个html页面
-    #     返回 HTMl 源码
-    #     """
-    #     env = jinja2.Environment(loader=jinja2.FileSystemLoader(searchpath='./', encoding='utf-8'))
-    #     template = env.get_template('article.html')
-    #
-    #     return template.render(article=article)
+    def render_article_to_html(self, article):
+        """ 将字典对象表示的 article 用模板引擎渲染成一个html页面
+        返回 HTMl 源码
+        """
+        return self.article_template.render(article=article)
+
 
 
 if __name__ == '__main__':
