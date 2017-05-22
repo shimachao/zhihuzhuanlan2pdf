@@ -5,13 +5,13 @@
 
 import requests
 import json
-import jinja2
+# import jinja2
 
 
 class ZhuanlanSession:
     """ 维护和知乎服务器之间的连接"""
 
-    def __int__(self):
+    def __init__(self):
         self.s = requests.session()
         self.default_headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 '
                                               '(KHTML, like Gecko)Chrome/35.0.1916.153 Safari/537.36 SE 2.X MetaSr 1.0',
@@ -69,13 +69,18 @@ class ZhuanlanSession:
 
         # 处理文章正文中的图片链接
 
-    @staticmethod
-    def render_article_to_html(article):
-        """ 将字典对象表示的 article 用模板引擎渲染成一个html页面
-        返回 HTMl 源码
-        """
-        env = jinja2.Environment(loader=jinja2.FileSystemLoader(searchpath='./', encoding='utf-8'))
-        template = env.get_template('article.html')
+    # @staticmethod
+    # def render_article_to_html(article):
+    #     """ 将字典对象表示的 article 用模板引擎渲染成一个html页面
+    #     返回 HTMl 源码
+    #     """
+    #     env = jinja2.Environment(loader=jinja2.FileSystemLoader(searchpath='./', encoding='utf-8'))
+    #     template = env.get_template('article.html')
+    #
+    #     return template.render(article=article)
 
-        return template.render(article=article)
 
+if __name__ == '__main__':
+    S = ZhuanlanSession()
+    _article = S.get_one_article('26783694')
+    print(_article['content'])
