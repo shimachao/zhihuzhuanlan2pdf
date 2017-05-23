@@ -22,7 +22,7 @@ class ZhuanlanSession:
 
         self.article_template = Template(filename='./article.html')
 
-    def get_one_article(self, slug):
+    def get_one_article_dict(self, slug):
         """ 获取 slug 指定的一篇知乎专栏文章
         slug 是知乎专栏文章的唯一识别码
         返回一个字典对象，里面包括文章标题、作者、发布时间、文章内容等
@@ -54,7 +54,7 @@ class ZhuanlanSession:
 
         return article
 
-    def img_download(self, url):
+    def _img_download(self, url):
         """ 下载 url 指定的图片并保存到本地，并返回本地路径"""
         # 提取 url 中图片的名称
         name = url[url.rfind('/')+1:]
@@ -68,12 +68,12 @@ class ZhuanlanSession:
     def images_to_local(self, article):
         """ 将 article 中引用到的所有图片下载到本地，并将 url 指向本地图片，方便后面转成 pdf
         需要处理的图片url包括文章标题中的图片，作者头像，以及正文中的图片"""
-        article['title_image_url'] = self.img_download(url=article['title_image_url'])
-        article['author_avatar_url'] = self.img_download(url=article['author_avatar_url'])
+        article['title_image_url'] = self._img_download(url=article['title_image_url'])
+        article['author_avatar_url'] = self._img_download(url=article['author_avatar_url'])
 
         # 处理文章正文中的图片链接
         def replace(match):
-            return self.img_download(match.group(0))
+            return self._img_download(match.group(0))
 
         article['content'] = re.sub(pattern=self.pattern, repl=replace, string=article['content'])
         # TODO:将正则表达式的模式编译成正则表达式对象，可以提高效率
@@ -82,11 +82,16 @@ class ZhuanlanSession:
         """ 将字典对象表示的 article 用模板引擎渲染成一个html页面
         返回 HTMl 源码
         """
-        return self.article_template.render(article=article)
+        return self.article_template.render_unicode(article=article).encode('utf-8', 'replace')
 
+    def get_article_html(self, slug):
+        """ 获取一篇文章最后的HTML源码"""
+        article = self.get_one_article_dict(slug=slug)
+        self.images_to_local(article=article)
+        return self.render_article_to_html(article=article)
 
 
 if __name__ == '__main__':
     S = ZhuanlanSession()
-    _article = S.get_one_article('26783694')
-    print(_article['content'])
+    with open('out.html', 'wb') as f:
+        f.write(S.get_article_html(slug='26783694'))
