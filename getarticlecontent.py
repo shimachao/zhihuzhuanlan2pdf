@@ -8,6 +8,7 @@ import json
 import re
 from mako.template import Template
 from bs4 import BeautifulSoup
+import arrow
 
 
 class ZhuanlanSession:
@@ -22,6 +23,12 @@ class ZhuanlanSession:
         self.pattern = r'https://.{8,256}?\.(jpg|png)'
 
         self.article_template = Template(filename='./article.html')
+
+    @staticmethod
+    def utc_to_local(utc):
+        """ 将一个UTC格式的时间字符串转为本地时间字符串"""
+        utc = arrow.get(utc)
+        return utc.format('YYYY-MM-DD HH:mm')
 
     def get_one_article_dict(self, slug):
         """ 获取 slug 指定的一篇知乎专栏文章
@@ -43,7 +50,7 @@ class ZhuanlanSession:
         author_avatar_url = author_avatar_template[:author_avatar_template.rfind('/')+1] + avatar_id + '_xs.jpg'
         article['author_avatar_url'] = author_avatar_url
         # 发布时间
-        article['publishedTime'] = json_obj['publishedTime']
+        article['publishedTime'] = self.utc_to_local(json_obj['publishedTime'])
 
         # 文章内容
         article['content'] = json_obj['content']
