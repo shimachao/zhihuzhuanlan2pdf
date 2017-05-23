@@ -7,6 +7,7 @@ import requests
 import json
 import re
 from mako.template import Template
+from bs4 import BeautifulSoup
 
 
 class ZhuanlanSession:
@@ -78,6 +79,28 @@ class ZhuanlanSession:
         article['content'] = re.sub(pattern=self.pattern, repl=replace, string=article['content'])
         # TODO:将正则表达式的模式编译成正则表达式对象，可以提高效率
 
+    @staticmethod
+    def handle_lazy_img(article):
+        """ 处理正文中的惰性加载图片。因为惰性加载图片是用空白图片占位，后用js代码动态请求图片再替换。
+        自己爬取的话，无法执行js代码，所以得自己处理一下"""
+        soup = BeautifulSoup(article['content'], 'lxml')
+        noscript_blocks = soup.find_all(name='noscript')
+        # 将所有noscript块中的图片地址提取出来，赋值给该块下一个兄弟块的img src属性
+        for noscript_block in noscript_blocks:
+            # 找到img 子节点
+            tag = noscript_block.find('img')
+            if tag:
+                img_path = tag['src']
+                # 修改惰性加载的图片src
+                for tag in tag.next_elements:
+                    if tag.name == 'img':
+                        tag['src'] = img_path
+                        break
+            # noscript 快不再需要
+            noscript_block.decompose()
+
+        article['content'] = str(soup)
+
     def render_article_to_html(self, article):
         """ 将字典对象表示的 article 用模板引擎渲染成一个html页面
         返回 HTMl 源码
@@ -88,6 +111,7 @@ class ZhuanlanSession:
         """ 获取一篇文章最后的HTML源码"""
         article = self.get_one_article_dict(slug=slug)
         self.images_to_local(article=article)
+        self.handle_lazy_img(article=article)
         return self.render_article_to_html(article=article)
 
 
