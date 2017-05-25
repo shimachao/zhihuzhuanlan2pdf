@@ -19,7 +19,7 @@ class ZhuanLan:
         self.s = s
         self.slug = slug
         self.img_path = './img'  # 图片的保存路径
-        self.cover_template = Template(filename='./cover.html', input_encoding='utf-8')
+        self.cover_template = Template(filename='./template/cover.html', input_encoding='utf-8')
 
     def _img_download(self, url):
         """ 下载 url 指定的图片并保存到本地，并返回本地路径"""

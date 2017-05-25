@@ -18,7 +18,7 @@ class Article:
         self.img_path = './img'  # 图片的保存路径
         self.pattern = r'https://.{8,256}?\.(jpg|png)'
 
-        self.article_template = Template(filename='./article.html')
+        self.article_template = Template(filename='./template/article.html')
 
     @staticmethod
     def utc_to_local(utc):
