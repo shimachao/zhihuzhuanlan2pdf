@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class=" no-touch">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>${ zhuanlan_dict['name'] }</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./cover.css">
+    <style></style>
+</head>
+
+<body class="">
+    <div id="react-root">
+        <div data-reactroot="">
+            <div class="Layout av-cardBackground">
+                <div class="Layout-main">
+                    <div class="ColumnAbout"><img src="${zhuanlan_dict['avatar']}" class="ColumnAbout-avatar" alt="">
+                        <h1 class="ColumnAbout-name">${zhuanlan_dict['name']}</h1>
+                        <p class="ColumnAbout-intro">${zhuanlan_dict['intro']}</p>
+                        <div>
+                            <a class="ColumnAbout-followers" target="_blank">
+                                ${zhuanlan_dict['followers_count']} 人关注
+                            </a>
+                        </div>
+                        <ul class="ColumnTopicList">
+                            <li><a ><span class="TopicTag is-active">全部<span class="TopicTag-count">${zhuanlan_dict['post_count']}</span></span></a></li>
+                            % for topic in zhuanlan_dict['post_topics']:
+                            <li><a><span class="TopicTag">${topic['name']}<span class="TopicTag-count">${topic['posts_count']}</span></span></a></li>
+                            % endfor
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
