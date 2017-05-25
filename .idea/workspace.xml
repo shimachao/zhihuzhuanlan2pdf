@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0203463b-5a38-4de5-94d1-f44912edc47e" name="Default" comment="将正文中章发布时间有UTC格式转为本地时间格式">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/article" afterPath="$PROJECT_DIR$/article.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/article.py" afterPath="$PROJECT_DIR$/article.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -39,9 +39,11 @@
       <file leaf-file-name="article.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/article.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="88">
+              <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+              <folding>
+                <element signature="e#85#96#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -81,6 +83,7 @@
         <option value="$PROJECT_DIR$/session.py" />
         <option value="$PROJECT_DIR$/getarticlecontent.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/article.py" />
       </list>
     </option>
   </component>
@@ -422,7 +425,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#85#96#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -438,7 +443,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#85#96#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -454,7 +461,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#85#96#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -470,7 +479,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#85#96#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -486,7 +497,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#85#96#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -502,7 +515,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="528">
           <caret line="24" column="40" lean-forward="false" selection-start-line="24" selection-start-column="40" selection-end-line="24" selection-end-column="40" />
-          <folding />
+          <folding>
+            <element signature="e#85#96#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -518,7 +533,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#85#96#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -572,9 +589,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/article.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="88">
+          <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+          <folding>
+            <element signature="e#85#96#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
