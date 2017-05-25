@@ -54,7 +54,6 @@ class ZhuanLan:
 
         self.zhuanlan_dict['post_topics'].sort(key=lambda obj: obj['posts_count'], reverse=True)
 
-
     def _render_cover(self):
         """ 渲染专栏信息到HTML代码，作为最后 pdf文件的封面
         """
