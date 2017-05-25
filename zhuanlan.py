@@ -21,6 +21,17 @@ class ZhuanLan:
         self.img_path = './img'  # 图片的保存路径
         self.cover_template = Template(filename='./cover.html', input_encoding='utf-8')
 
+    def _img_download(self, url):
+        """ 下载 url 指定的图片并保存到本地，并返回本地路径"""
+        # 提取 url 中图片的名称
+        name = url[url.rfind('/')+1:]
+        binary_content = self.s.get(url=url).content
+        path = self.img_path + '/' + name
+        with open(file=path, mode='wb') as f:
+            f.write(binary_content)
+
+        return path
+
     def _get_zhuanlan_info(self):
         """ 爬取专栏信息"""
         url = 'https://zhuanlan.zhihu.com/api/columns/' + self.slug
@@ -29,6 +40,8 @@ class ZhuanLan:
         self.zhuanlan_dict = dict()
         self.zhuanlan_dict['avatar'] = json_obj['avatar']['template'].replace('{id}', json_obj['avatar']['id']).\
             replace('{size}', 'r')
+        # 将图片保存到本地
+        self.zhuanlan_dict['avatar'] = self._img_download(self.zhuanlan_dict['avatar'])
         self.zhuanlan_dict['name'] = json_obj['name']
         self.zhuanlan_dict['intro'] = json_obj['intro']
         self.zhuanlan_dict['followers_count'] = json_obj['followersCount']
