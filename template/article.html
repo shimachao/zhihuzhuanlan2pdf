@@ -17,8 +17,11 @@
                 <!-- react-empty: 19 -->
                 <div class="Layout-main av-paddingBottom av-bodyFont Layout-titleImage--normal" data-za-module="PostItem">
                     <div class="PostIndex-header av-paddingTop av-card">
+                        % if article['title_image_url'] != '':
                         <div class="TitleImage"><img alt="${ article['title'] | n}" src="${ article['title_image_url'] | n}" class="TitleImage-imagePure TitleImage-imagePure--fixed" height="364px" />
                         </div>
+                        % endif
+
                         <h1 class="PostIndex-title av-paddingSide av-titleFont">${ article['title'] | n}</h1>
                         <div class="PostIndex-author">
                             <a href="" target="_blank">
