@@ -3,7 +3,6 @@
 """ 获取一个知乎专栏中的一篇文章，以供后续分析
 """
 
-import requests
 import json
 import re
 from mako.template import Template
@@ -11,14 +10,11 @@ from bs4 import BeautifulSoup
 import arrow
 
 
-class ZhuanlanSession:
-    """ 维护和知乎服务器之间的连接"""
+class Article:
+    """ 爬取单篇文章"""
 
-    def __init__(self):
-        self.s = requests.session()
-        self.default_headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 '
-                                              '(KHTML, like Gecko)Chrome/35.0.1916.153 Safari/537.36 SE 2.X MetaSr 1.0',
-                                'Encoding': 'UTF-8'}
+    def __init__(self, session):
+        self.session = session
         self.img_path = './img'  # 图片的保存路径
         self.pattern = r'https://.{8,256}?\.(jpg|png)'
 
@@ -35,10 +31,9 @@ class ZhuanlanSession:
         slug 是知乎专栏文章的唯一识别码
         返回一个字典对象，里面包括文章标题、作者、发布时间、文章内容等
         """
-        self.s.headers.update(self.default_headers)
         url = 'https://zhuanlan.zhihu.com/api/posts/' + slug
 
-        json_obj = json.loads(self.s.get(url=url).text, encoding='utf-8')
+        json_obj = json.loads(self.session.get(url=url).text, encoding='utf-8')
         article = dict()
         article['title'] = json_obj['title']
         article['title_image_url'] = json_obj['titleImage']
@@ -66,7 +61,7 @@ class ZhuanlanSession:
         """ 下载 url 指定的图片并保存到本地，并返回本地路径"""
         # 提取 url 中图片的名称
         name = url[url.rfind('/')+1:]
-        binary_content = self.s.get(url=url).content
+        binary_content = self.session.get(url=url).content
         path = self.img_path + '/' + name
         with open(file=path, mode='wb') as f:
             f.write(binary_content)
@@ -103,7 +98,7 @@ class ZhuanlanSession:
                     if tag.name == 'img':
                         tag['src'] = img_path
                         break
-            # noscript 快不再需要
+            # noscript 块不再需要
             noscript_block.decompose()
 
         article['content'] = str(soup)
@@ -123,6 +118,8 @@ class ZhuanlanSession:
 
 
 if __name__ == '__main__':
-    S = ZhuanlanSession()
+    from session import session as s
+    a = Article(s)
+
     with open('out.html', 'wb') as f:
-        f.write(S.get_article_html(slug='26783694'))
+        f.write(a.get_article_html(slug='26783694'))
