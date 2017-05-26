@@ -63,14 +63,13 @@ class Article:
             return ''
         if url.find('https') < 0:
             url = 'https://pic1.zhimg.com/' + url
-            print('66:', url)
         name = url[url.rfind('/')+1:]
         binary_content = self.session.get(url=url).content
         path = self.img_path + '/' + name
         with open(file=path, mode='wb') as f:
             f.write(binary_content)
 
-        return path
+        return './img/'+name
 
     def images_to_local(self, article):
         """ 将 article 中引用到的所有图片下载到本地，并将 url 指向本地图片，方便后面转成 pdf
@@ -125,4 +124,4 @@ if __name__ == '__main__':
     a = Article(s)
 
     with open('out2.html', 'wb') as f:
-        f.write(a.get_article_html(url='https://zhuanlan.zhihu.com/api/columns/kls-software-arch-world/posts?limit=1&offset=2'))
+        f.write(a.get_article_html(url='https://zhuanlan.zhihu.com/api/columns/kls-software-arch-world/posts?limit=1&offset=0'))

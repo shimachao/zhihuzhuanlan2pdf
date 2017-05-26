@@ -31,7 +31,7 @@ class ZhuanLan:
         with open(file=path, mode='wb') as f:
             f.write(binary_content)
 
-        return path
+        return './img/' + name
 
     def _get_zhuanlan_info(self):
         """ 爬取专栏信息"""

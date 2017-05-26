@@ -1,0 +1,32 @@
+# -*-coding:utf-8-*-
+
+from zhuanlan import ZhuanLan
+from session import session as s
+import pdfkit
+
+
+def zhuanlan_to_pdf(slug):
+    """ 爬取专栏并保存为pdf
+    """
+    zl = zl = ZhuanLan(s=s, slug=slug)
+    cover, article_list = zl.get_result()
+    # 保存为文件
+    with open(file='./out/'+zl.name+'_cover.html', mode='wb') as f:
+        f.write(cover)
+
+    for index, article in enumerate(article_list):
+        with open(file='./out/'+zl.name+'_'+str(index)+'.html', mode='wb') as f:
+            f.write(article)
+
+    config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
+    pdfkit.from_file(input=['./out/'+zl.name+'_'+str(index)+'.html' for index in range(len(article_list))],
+                     cover='./out/'+zl.name+'_cover.html',
+                     output_path='./out/'+zl.name+'.pdf',
+                     configuration=config)
+
+
+if __name__ == '__main__':
+    import sys
+    slug = sys.argv[1][sys.argv[1].rfind('/')+1:]
+    print(slug)
+    zhuanlan_to_pdf(slug)
