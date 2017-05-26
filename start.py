@@ -8,7 +8,7 @@ import pdfkit
 def zhuanlan_to_pdf(slug):
     """ 爬取专栏并保存为pdf
     """
-    zl = zl = ZhuanLan(s=s, slug=slug)
+    zl = ZhuanLan(s=s, slug=slug)
     cover, article_list = zl.get_result()
     # 保存为文件
     with open(file='./out/'+zl.name+'_cover.html', mode='wb') as f:
@@ -28,5 +28,4 @@ def zhuanlan_to_pdf(slug):
 if __name__ == '__main__':
     import sys
     slug = sys.argv[1][sys.argv[1].rfind('/')+1:]
-    print(slug)
     zhuanlan_to_pdf(slug)
