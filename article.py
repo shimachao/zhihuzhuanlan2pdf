@@ -16,7 +16,7 @@ class Article:
     def __init__(self, session):
         self.session = session
         self.img_path = './out/img'  # 图片的保存路径
-        self.pattern = r'\"[0-9a-zA-Z\-.]{8,64}?\.(jpg|png)\"'
+        self.pattern = r'\"https://.+?\.(jpg|png)\"'
 
         self.article_template = Template(filename='./template/article.html')
 
@@ -46,8 +46,10 @@ class Article:
         # 发布时间
         article['publishedTime'] = self.utc_to_local(json_obj['publishedTime'])
 
-        # 文章内容
-        article['content'] = json_obj['content']
+        # 获取文章内容
+        url2 = 'https://zhuanlan.zhihu.com/api/posts/{0}'.format(json_obj['slug'])
+        r = self.session.get(url=url2).json()
+        article['content'] = r['content']
 
         # 该文章的评论列表url
         article['comments_links'] = 'https://zhuanlan.zhihu.com' + json_obj['links']['comments']
@@ -59,17 +61,13 @@ class Article:
     def _img_download(self, url):
         """ 下载 url 指定的图片并保存到本地，并返回本地路径"""
         # 提取 url 中图片的名称
-        if url is None or len(url) == 0:
-            return ''
-        if url.find('https') < 0:
-            url = 'https://pic1.zhimg.com/' + url
         name = url[url.rfind('/')+1:]
         binary_content = self.session.get(url=url).content
         path = self.img_path + '/' + name
         with open(file=path, mode='wb') as f:
             f.write(binary_content)
 
-        return './img/'+name
+        return './img/' + name
 
     def images_to_local(self, article):
         """ 将 article 中引用到的所有图片下载到本地，并将 url 指向本地图片，方便后面转成 pdf
@@ -96,7 +94,7 @@ class Article:
             img_node = noscript_block.find('img')
             if img_node:
                 # 修改惰性加载的图片src
-                for tag in noscript_block.next_elements:
+                for tag in noscript_block.next_siblings:
                     if tag.name == 'img':
                         tag['src'] = img_node['src']
                         break
@@ -123,5 +121,5 @@ if __name__ == '__main__':
     from session import session as s
     a = Article(s)
 
-    with open('out2.html', 'wb') as f:
-        f.write(a.get_article_html(url='https://zhuanlan.zhihu.com/api/columns/kls-software-arch-world/posts?limit=1&offset=0'))
+    with open('./out/out2.html', 'wb') as f:
+        f.write(a.get_article_html(url='https://zhuanlan.zhihu.com/api/columns/auxten/posts?limit=1&offset=0'))

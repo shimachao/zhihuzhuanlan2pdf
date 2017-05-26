@@ -19,10 +19,12 @@ def zhuanlan_to_pdf(slug):
             f.write(article)
 
     config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')
+    options = {'outline-depth': 1}
     pdfkit.from_file(input=['./out/'+zl.name+'_'+str(index)+'.html' for index in range(len(article_list))],
                      cover='./out/'+zl.name+'_cover.html',
                      output_path='./out/'+zl.name+'.pdf',
-                     configuration=config)
+                     configuration=config,
+                     options=options)
 
 
 if __name__ == '__main__':
