@@ -65,7 +65,7 @@ class ZhuanLan:
         article = Article(self.s)
         article_list = []
         for i in range(self.zhuanlan_dict['post_count']):
-            url = 'https://zhuanlan.zhihu.com/api/columnskls-software-arch-world/posts?limit=1&offset={0}'.format(i)
+            url = 'https://zhuanlan.zhihu.com/api/columns/kls-software-arch-world/posts?limit=1&offset={0}'.format(i)
             article_list.append(article.get_article_html(url=url))
 
         return article_list
