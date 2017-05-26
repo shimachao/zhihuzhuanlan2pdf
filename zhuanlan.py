@@ -19,7 +19,7 @@ class ZhuanLan:
 
         self.s = s
         self.slug = slug
-        self.img_path = './img'  # 图片的保存路径
+        self.img_path = './out/img'  # 图片的保存路径
         self.cover_template = Template(filename='./template/cover.html', input_encoding='utf-8')
 
     def _img_download(self, url):
@@ -44,6 +44,7 @@ class ZhuanLan:
         # 将图片保存到本地
         self.zhuanlan_dict['avatar'] = self._img_download(self.zhuanlan_dict['avatar'])
         self.zhuanlan_dict['name'] = json_obj['name']
+        self.name = self.zhuanlan_dict['name']
         self.zhuanlan_dict['intro'] = json_obj['intro']
         self.zhuanlan_dict['followers_count'] = json_obj['followersCount']
         self.zhuanlan_dict['post_count'] = json_obj['postsCount']

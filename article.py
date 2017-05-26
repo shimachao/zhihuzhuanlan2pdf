@@ -15,7 +15,7 @@ class Article:
 
     def __init__(self, session):
         self.session = session
-        self.img_path = './img'  # 图片的保存路径
+        self.img_path = './out/img'  # 图片的保存路径
         self.pattern = r'\"[0-9a-zA-Z\-.]{8,64}?\.(jpg|png)\"'
 
         self.article_template = Template(filename='./template/article.html')

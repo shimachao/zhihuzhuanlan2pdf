@@ -1,4 +1,5 @@
 *.jpg
 *.png
 out.html
+out
 __pycache__
