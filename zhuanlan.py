@@ -6,6 +6,7 @@
 import json
 from mako.template import Template
 from session import session
+from article import Article
 
 
 class ZhuanLan:
@@ -54,19 +55,28 @@ class ZhuanLan:
 
         self.zhuanlan_dict['post_topics'].sort(key=lambda obj: obj['posts_count'], reverse=True)
 
-    def _render_cover(self):
-        """ 渲染专栏信息到HTML代码，作为最后 pdf文件的封面
-        """
-        self.cover_html = self.cover_template.render(zhuanlan_dict=self.zhuanlan_dict).encode('utf-8', 'replace')
-
-    def start(self):
+    def _get_cover(self):
         self._get_zhuanlan_info()
-        self._render_cover()
+        return self.cover_template.render(zhuanlan_dict=self.zhuanlan_dict).encode('utf-8', 'replace')
+
+    def _get_article_list(self):
+        """ 获取该专栏下面的各篇文章的html渲染结果
+        """
+        article = Article(self.s)
+        article_list = []
+        for i in range(self.zhuanlan_dict['post_count']):
+            url = 'https://zhuanlan.zhihu.com/api/columnskls-software-arch-world/posts?limit=1&offset={0}'.format(i)
+            article_list.append(article.get_article_html(url=url))
+
+        return article_list
+
+    def get_result(self):
+        """ 返回cover 和文章列表"""
+        return self._get_cover(), self._get_article_list()
 
 
 if __name__ == '__main__':
     zhuanlan = ZhuanLan(s=session, slug='auxten')
-    zhuanlan.start()
 
     with open(file='./cover_test.html', mode='wb') as f:
-        f.write(zhuanlan.cover_html)
+        f.write(zhuanlan._get_cover())
