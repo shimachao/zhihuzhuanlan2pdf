@@ -13,6 +13,9 @@ import os.path
 class Article:
     """ 爬取单篇文章"""
 
+    h_replace_table={'<h1>':'<h2>', '<h2>':'<h3>', '<h3>':'<h4>', '<h4>':'<h5>', '<h5>':'<h6>',
+                    '</h1>': '</h2>', '</h2>': '</h3>', '</h3>': '</h4>', '</h4>': '</h5>', '</h5>': '</h6>'}
+
     def __init__(self, session):
         self.session = session
         self.img_path = './out/img'  # 图片的保存路径
@@ -106,6 +109,20 @@ class Article:
 
         article['content'] = str(soup)
 
+    @staticmethod
+    def correct_titles(article):
+        """ 有些文章内容中的会出现h1标签，然而文章名也是h1标签，会导致生成pdf时的标签错误，
+        必须将文章内容中出现的h1降级为h2
+        :param article: 文章字典对象
+        :return: 无返回
+        """
+        def replace(match):
+            return Article.h_replace_table.get(match.group(0), match.group(0))
+
+        if re.search(pattern=r'<h1>', string=article['content']) is not None:
+            # 文章内容中出现 h1 标签，说明需要h系列标签需要降级处理
+            article['content'] = re.sub(pattern=r'</?h[1-5]>', repl=replace, string=article['content'])
+
     def render_article_to_html(self, article):
         """ 将字典对象表示的 article 用模板引擎渲染成一个html页面
         返回 HTMl 源码
@@ -117,6 +134,7 @@ class Article:
         article = self.get_one_article_dict(url=url)
         self.images_to_local(article=article)
         self.handle_lazy_img(article=article)
+        self.correct_titles(article=article)
         return self.render_article_to_html(article=article)
 
 
