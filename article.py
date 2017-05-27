@@ -3,11 +3,11 @@
 """ 获取一个知乎专栏中的一篇文章，保持原来的排版，去掉不需要的内容，最终渲染成 html，以便后面转成 pdf
 """
 
-import json
 import re
 from mako.template import Template
 from bs4 import BeautifulSoup
 import arrow
+import os.path
 
 
 class Article:
@@ -62,6 +62,9 @@ class Article:
         """ 下载 url 指定的图片并保存到本地，并返回本地路径"""
         # 提取 url 中图片的名称
         name = url[url.rfind('/')+1:]
+        # 如果本地已经有该图片就不再下载，节省时间和流量
+        if os.path.isfile('./img/' + name):
+            return './img/' + name
         binary_content = self.session.get(url=url).content
         path = self.img_path + '/' + name
         with open(file=path, mode='wb') as f:
