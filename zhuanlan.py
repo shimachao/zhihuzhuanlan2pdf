@@ -28,10 +28,10 @@ class ZhuanLan:
         # 提取 url 中图片的名称
         name = url[url.rfind('/')+1:]
         # 如果本地已经有该图片就不再下载，节省时间和流量
-        if os.path.isfile('./img/' + name):
+        path = self.img_path + '/' + name
+        if os.path.isfile(path):
             return './img/' + name
         binary_content = self.s.get(url=url).content
-        path = self.img_path + '/' + name
         with open(file=path, mode='wb') as f:
             f.write(binary_content)
 
