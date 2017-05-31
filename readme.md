@@ -36,7 +36,7 @@
     $ pip install wkhtmltopdf
     ```
 
-    windows 平台去 [wkhtmltopdf 官网](http://wkhtmltopdf.org/)下载对应的Windows版本安装文件安装即可。参加 [PDFKit 项目文档](https://github.com/JazzCore/python-pdfkit)。
+    windows 平台去 [wkhtmltopdf 官网](http://wkhtmltopdf.org/)下载对应的Windows版本安装文件安装即可。参见 [PDFKit 项目文档](https://github.com/JazzCore/python-pdfkit)。
 
 ## 使用
 
