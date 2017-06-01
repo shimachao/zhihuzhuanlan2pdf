@@ -49,10 +49,15 @@ class Article:
         # 发布时间
         article['publishedTime'] = self.utc_to_local(json_obj['publishedTime'])
 
-        # 获取文章内容
+        # 获取文章内容，这里用另一个api再次请求文章数据
         url2 = 'https://zhuanlan.zhihu.com/api/posts/{0}'.format(json_obj['slug'])
         r = session.get(url=url2).json()
         article['content'] = r['content']
+        # 获取文章相关主题
+        topics = []
+        for topic in r['topics']:
+            topics.append(topic["name"])
+        article['topics'] = topics
 
         # 该文章的评论列表url
         article['comments_links'] = 'https://zhuanlan.zhihu.com' + json_obj['links']['comments']

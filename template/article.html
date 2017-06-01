@@ -37,6 +37,13 @@
                     <div class="RichText PostIndex-content av-paddingSide av-card">
                         ${ article['content']| n }
                     </div>
+                    <div class="PostIndex-footer">
+                        <div class="PostIndex-topics TopicItem-wrapper">
+                            % for topic in article['topics']:
+                            <span class="TopicItem u-ellipsis PostIndex-topicItem">${ topic }</span>
+                            % endfor
+                        </div>
+
                 </div>
             </div>
         </div>
