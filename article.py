@@ -63,6 +63,8 @@ class Article:
 
     def _img_download(self, url):
         """ 下载 url 指定的图片并保存到本地，并返回本地路径"""
+        if url is None or len(url) == 0:
+            return ''
         # 提取 url 中图片的名称
         name = url[url.rfind('/')+1:]
         # 如果本地已经有该图片就不再下载，节省时间和流量
@@ -123,7 +125,8 @@ class Article:
             # 文章内容中出现 h1 标签，说明需要h系列标签需要降级处理
             article['content'] = re.sub(pattern=r'</?h[1-5]>', repl=replace, string=article['content'])
 
-    def render_article_to_html(self, article):
+    @staticmethod
+    def render_article_to_html(article):
         """ 将字典对象表示的 article 用模板引擎渲染成一个html页面
         返回 HTMl 源码
         """
