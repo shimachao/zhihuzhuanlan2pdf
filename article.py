@@ -8,6 +8,7 @@ from mako.template import Template
 from bs4 import BeautifulSoup
 import arrow
 import os.path
+from session import session
 
 
 class Article:
@@ -15,13 +16,12 @@ class Article:
 
     h_replace_table={'<h1>':'<h2>', '<h2>':'<h3>', '<h3>':'<h4>', '<h4>':'<h5>', '<h5>':'<h6>',
                     '</h1>': '</h2>', '</h2>': '</h3>', '</h3>': '</h4>', '</h4>': '</h5>', '</h5>': '</h6>'}
+    img_path = './out/img'  # 图片的保存路径
+    pattern = r'\"https://.+?\.(jpg|png)\"'
+    article_template = Template(filename='./template/article.html')
 
-    def __init__(self, session):
-        self.session = session
-        self.img_path = './out/img'  # 图片的保存路径
-        self.pattern = r'\"https://.+?\.(jpg|png)\"'
-
-        self.article_template = Template(filename='./template/article.html')
+    def __init__(self):
+        pass
 
     @staticmethod
     def utc_to_local(utc):
@@ -35,7 +35,7 @@ class Article:
         返回一个字典对象，里面包括文章标题、作者、发布时间、文章内容等
         """
 
-        json_obj = self.session.get(url=url).json()[0]
+        json_obj = session.get(url=url).json()[0]
         article = dict()
         article['title'] = json_obj['title']
         article['title_image_url'] = json_obj['titleImage']
@@ -51,7 +51,7 @@ class Article:
 
         # 获取文章内容
         url2 = 'https://zhuanlan.zhihu.com/api/posts/{0}'.format(json_obj['slug'])
-        r = self.session.get(url=url2).json()
+        r = session.get(url=url2).json()
         article['content'] = r['content']
 
         # 该文章的评论列表url
@@ -66,10 +66,10 @@ class Article:
         # 提取 url 中图片的名称
         name = url[url.rfind('/')+1:]
         # 如果本地已经有该图片就不再下载，节省时间和流量
-        path = self.img_path + '/' + name
+        path = Article.img_path + '/' + name
         if os.path.isfile(path):
             return './img/' + name
-        binary_content = self.session.get(url=url).content
+        binary_content = session.get(url=url).content
         with open(file=path, mode='wb') as f:
             f.write(binary_content)
 
@@ -85,7 +85,7 @@ class Article:
         def replace(match):
             return self._img_download(match.group(0).strip('\"'))
 
-        article['content'] = re.sub(pattern=self.pattern, repl=replace, string=article['content'])
+        article['content'] = re.sub(pattern=Article.pattern, repl=replace, string=article['content'])
         # TODO:将正则表达式的模式编译成正则表达式对象，可以提高效率
 
     @staticmethod
@@ -127,7 +127,7 @@ class Article:
         """ 将字典对象表示的 article 用模板引擎渲染成一个html页面
         返回 HTMl 源码
         """
-        return self.article_template.render(article=article).encode('utf-8')
+        return Article.article_template.render(article=article).encode('utf-8')
 
     def get_article_html(self, url):
         """ 获取一篇文章最后的HTML源码"""
@@ -139,8 +139,8 @@ class Article:
 
 
 if __name__ == '__main__':
-    from session import session as s
-    a = Article(s)
+
+    a = Article()
 
     with open('./out/out2.html', 'wb') as f:
         f.write(a.get_article_html(url='https://zhuanlan.zhihu.com/api/columns/auxten/posts?limit=1&offset=0'))

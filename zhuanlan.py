@@ -67,7 +67,7 @@ class ZhuanLan:
     def _get_article_list(self):
         """ 获取该专栏下面的各篇文章的html渲染结果
         """
-        article = Article(self.s)
+        article = Article()
         article_list = []
         for i in range(self.zhuanlan_dict['post_count']):
             url = 'https://zhuanlan.zhihu.com/api/columns/{0}/posts?limit=1&offset={1}'.format(self.slug, i)
