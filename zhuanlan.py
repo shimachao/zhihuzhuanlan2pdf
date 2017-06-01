@@ -83,5 +83,5 @@ class ZhuanLan:
 if __name__ == '__main__':
     zhuanlan = ZhuanLan(s=session, slug='auxten')
 
-    with open(file='./cover_test.html', mode='wb') as f:
+    with open(file='./out/cover_test.html', mode='wb') as f:
         f.write(zhuanlan._get_cover())
