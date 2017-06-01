@@ -3,6 +3,25 @@
 from zhuanlan import ZhuanLan
 from session import session as s
 import pdfkit
+import platform
+from io import StringIO
+
+
+def correct_filename(filename):
+    """修正文件名
+    例如Windows下的文件名不能包含英文符号< > / \ | : " * ?
+    :return: 合格的文件名
+    """
+    replace_table = {':': '：', '?': '？', '<': '', '>': '', '/': '', '\\': '',
+                     '"': '“', '|': ' ', '*': ''}
+    if platform.system() == 'Windows':
+        f = StringIO()
+        for c in filename:
+            f.write(replace_table.get(c, c))
+
+        return f.getvalue()
+
+    return filename
 
 
 def zhuanlan_to_pdf(slug):
@@ -11,6 +30,9 @@ def zhuanlan_to_pdf(slug):
     zl = ZhuanLan(s=s, slug=slug)
     cover, article_list = zl.get_result()
     # 保存为文件
+    # 保存文件之前要检查文件名是否合格，
+    zl.name = correct_filename(zl.name)
+
     with open(file='./out/'+zl.name+'_cover.html', mode='wb') as f:
         f.write(cover)
 
