@@ -43,7 +43,57 @@
                             <span class="TopicItem u-ellipsis PostIndex-topicItem">${ topic }</span>
                             % endfor
                         </div>
+                    </div>
+                    <div class="PostComment">
+                        <div class="BlockTitle av-marginLeft av-borderColor PostComment-blockTitle">
+                            <span class="BlockTitle-title">
+                                % if article['comments_count'] == 0:
+                                目前暂无评论
+                                % elif article['comments_count'] <= 10:
+                                ${article['comments_count']} 条评论
+                                % else:
+                                前10条评论
+                                %endif
+                            </span>
+                            <span class="BlockTitle-line"/>
+                        </div>
+                        <div class="PostCommentList">
+                            % for comment in article['comments']:
+                            <div class="CommentItem">
+                                <a class="UserAvatar CommentItem-author"><img class="Avatar Avatar--xs" src="${comment['avatar'] |n}">
+                                </a>
+                                <div class="CommentItem-headWrapper">
+                                    <div class="CommentItem-head">
+                                        <span class="CommentItem-context">
+                                            <a>${ comment['author_name'] |n}</a>
+                                        </span>
+                                        % if comment['reply_to']:
+                                        <span class="CommentItem-replyTo">
+                                            <span class="CommentItem-replySplit">回复</span>
+                                            <a>${ comment['reply_to'] |n}</a>
+                                        </span>
+                                        % endif
+                                    </div>
+                                </div>
+                                <div class="CommentItem-content">
+                                    ${ comment['content'] }
+                                </div>
+                                <div class="CommentItem-foot">
+                                    <span class="CommentItem-like">
+                                        % if comment['likes_count'] > 0:
+                                        ${comment['likes_count']} 赞
+                                        % endif
+                                    </span>
+                                    <div class="HoverTitle CommentItem-createdTime">
+                                        <time >${ comment['create_time'] |n}
+                                        </time>
+                                    </div>
+                                </div>
+                            </div>
+                            % endfor
+                        </div>
 
+                    </div>
                 </div>
             </div>
         </div>

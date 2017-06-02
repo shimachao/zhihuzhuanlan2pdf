@@ -18,7 +18,7 @@ class Article:
                        '</h1>': '</h2>', '</h2>': '</h3>', '</h3>': '</h4>', '</h4>': '</h5>', '</h5>': '</h6>'}
     img_path = './out/img'  # 图片的保存路径
     pattern = r'\"https://.+?\.(jpg|png)\"'
-    article_template = Template(filename='./template/article.html')
+    article_template = Template(filename='./template/article.html', input_encoding='utf-8')
 
     def __init__(self):
         self.article = dict()
@@ -31,7 +31,6 @@ class Article:
 
     def get_article_dict(self, url):
         """ 获取 url 指定的一篇知乎专栏文章
-        slug 是知乎专栏文章的唯一识别码
         返回一个字典对象，里面包括文章标题、作者、发布时间、文章内容等
         """
 
@@ -118,8 +117,6 @@ class Article:
     def correct_content_titles(self):
         """ 有些文章内容中的会出现h1标签，然而文章名也是h1标签，会导致生成pdf时的标签错误，
         必须将文章内容中出现的h1降级为h2
-        :param self.article: 文章字典对象
-        :return: 无返回
         """
         def replace(match):
             return Article.h_replace_table.get(match.group(0), match.group(0))
@@ -127,6 +124,26 @@ class Article:
         if re.search(pattern=r'<h1>', string=self.article['content']) is not None:
             # 文章内容中出现 h1 标签，说明需要h系列标签需要降级处理
             self.article['content'] = re.sub(pattern=r'</?h[1-5]>', repl=replace, string=self.article['content'])
+
+    def get_comments(self):
+        """ 获取文章的评论列表"""
+        json_obj = session.get(self.article['comments_links'] + '?limit=10&offset=0').json()
+        self.article['comments'] = []
+        for _comment in json_obj:
+            comment = dict()
+            comment['author_name'] = _comment['author']['name']
+            comment['content'] = _comment['content']
+            comment['create_time'] = Article.utc_to_local(_comment['createdTime'])
+            # 拼接出评论作者的头像url
+            _url = _comment['author']['avatar']['template'].replace('{id}', _comment['author']['avatar']['id'])\
+                .replace('{size}', 'xs')
+            comment['avatar'] = Article._img_download(_url)
+            comment['likes_count'] = _comment['likesCount']  # 点赞数
+            # 是否属于回复其他人的评论
+            comment['reply_to'] = None
+            if _comment["inReplyToCommentId"] != 0:
+                comment['reply_to'] = _comment["inReplyToUser"]["name"]
+            self.article['comments'].append(comment)
 
     def render_to_html(self):
         """ 将字典对象表示的 self.article 用模板引擎渲染成一个html页面
@@ -140,6 +157,7 @@ class Article:
         self.images_to_local()
         self.handle_lazy_img()
         self.correct_content_titles()
+        self.get_comments()
         return self.render_to_html()
 
 
@@ -148,4 +166,4 @@ if __name__ == '__main__':
     a = Article()
 
     with open('./out/out3.html', 'wb') as f:
-        f.write(a.get_article_html(url='https://zhuanlan.zhihu.com/api/columns/auxten/posts?limit=1&offset=0'))
+        f.write(a.get_article_html(url='https://zhuanlan.zhihu.com/api/columns/auxten/posts?limit=1&offset=1'))
